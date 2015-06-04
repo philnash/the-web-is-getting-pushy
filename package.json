@@ -1,0 +1,22 @@
+{
+  "name": "the-web-is-getting-pushy",
+  "version": "1.0.0",
+  "description": "An example of causing push notifications in the browser by streaming search results for a hashtag",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Phil Nash",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.12.3",
+    "dotenv": "^1.1.0",
+    "express": "^4.12.2",
+    "hbs": "^2.9.0",
+    "node-gcm": "^0.9.15",
+    "request": "^2.53.0",
+    "twilio": "^1.11.1",
+    "twitter": "^1.2.5"
+  }
+}

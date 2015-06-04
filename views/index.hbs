@@ -1,0 +1,15 @@
+<header>
+  <h1>{{ hashtag }}</h1>
+</header>
+
+<button>Get notifications</button>
+
+<ol id="messages">
+  {{#each messages}}
+    <li>
+      <p><strong>From:</strong> {{this.user.screen_name}}</p>
+      <p><strong>Message:</strong> {{this.text}}</p>
+    </li>
+  {{/each}}
+</ol>
+

@@ -1,0 +1,9 @@
+{
+  "name": "The web is getting pushy",
+  "developer": {
+    "name": "Phil Nash",
+    "url": "http://philna.sh"
+  },
+  "gcm_sender_id": "YOUR_GCM_SENDER_ID",
+  "gcm_user_visible_only": true
+}
