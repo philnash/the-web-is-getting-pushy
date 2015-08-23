@@ -39,7 +39,7 @@ app.get("/", function(req, res){
 });
 
 app.get("/stream", function(req, res){
-  req.socket.setTimeout(Infinity);
+  req.setTimeout(0);
   var sendMessage = function(message){
     messageCount++;
     res.write('id: ' + messageCount + '\n');
