@@ -1,20 +1,17 @@
-self.addEventListener('push', function(event){
-  console.log(event);
+self.addEventListener('push', (event) => {
   event.waitUntil(
-    fetch('/latest').then(function(data){
-      console.log(data);
+    fetch('/latest').then((data) => {
       return data.json()
-    }).then(function(message){
-      console.log(message);
-      self.registration.showNotification(`From: ${message.from}`, {
+    }).then((message) => {
+      return self.registration.showNotification(`From: ${message.from}`, {
         body: `Message: ${message.body}`
       })
     })
-  )
-}, false);
+  );
+})
 
-self.addEventListener('notificationclick', function(event){
+self.addEventListener('notificationclick', (event) => {
   event.waitUntil(
     clients.openWindow('http://localhost:3000/')
   )
-}, false);
+})

@@ -3,27 +3,36 @@ var list = $('#messages');
 
 var serviceWorker = navigator.serviceWorker.register('/service-worker.js');
 
-stream.addEventListener('message', function(event){
+stream.addEventListener('message', (event) => {
   var message = JSON.parse(event.data);
 
-  var li = $(`<li class="new"><p><strong>From: </strong>${message.from}</p><p><strong>Message: </strong>${message.body}</p></li>`);
+  var li = $(`
+    <li class="new">
+      <p><strong>From</strong>: ${message.from}</p>
+      <p><strong>Message:</strong>: ${message.body}</p>
+    </li>
+  `);
+
   list.prepend(li);
 
-  // if (Notification.permission === 'granted'){
+  // if (Notification.permission === 'granted') {
   //   new Notification(`From: ${message.from}`, {
   //     body: `Message: ${message.body}`
-  //   });
+  //   })
   // }
-}, false);
+});
 
-var button = $('button');
 
-button.on('click', function(event){
-  Notification.requestPermission();
+$('button').on('click', (event) => {
+  // Notification.requestPermission();
 
-  serviceWorker.then(function(registration){
-    return registration.pushManager.subscribe();
-  }).then(function(subscription){
-    fetch(`/sub?subId=${subscription.subscriptionId}`);
+  serviceWorker.then((registration) => {
+    return registration.pushManager.subscribe({userVisibleOnly: true})
+  }).then((subscription) => {
+    // Get the GCM id from the endpoint URL
+    var endpoint = subscription.endpoint;
+    var endpointParts = endpoint.split('/');
+    var subId = endpointParts[endpointParts.length -1];
+    fetch(`/sub?subId=${subId}`);
   });
 });
