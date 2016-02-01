@@ -1,16 +1,17 @@
 var express       = require("express"),
     bodyParser    = require('body-parser'),
     hbs           = require("hbs"),
-    gcm           = require('node-gcm'),
+    webPush       = require('web-push'),
     dotenv        = require('dotenv'),
     Twitter       = require('twitter'),
     EventEmitter  = require('events').EventEmitter,
     emitter       = new EventEmitter(),
     app           = express(),
     messageCount  = 0,
-    registrationId;
+    endpoint, key;
 
 dotenv.load();
+webPush.setGCMAPIKey(process.env.GCM_ID);
 
 var hashtag = process.env.HASHTAG;
 
@@ -67,16 +68,15 @@ twitterClient.stream('statuses/filter', {track: hashtag},  function(stream){
     console.log(data);
     emitter.emit("message", data);
 
-    // GCM
-    if (typeof registrationId !== 'undefined'){
-      var message = new gcm.Message();
-      message.addData({ data: data });
-      var sender = new gcm.Sender(process.env.GCM_ID);
-      sender.send(message, [registrationId], function(err, result){
-        console.log(err, result);
-        if(err) console.log(err);
-        else    console.log(result);
-      });
+    if (typeof endpoint !== 'undefined') {
+      if (typeof key !== 'undefined') {
+        var push = webPush.sendNotification(endpoint, 120, key, JSON.stringify(data));
+      } else {
+        var push = webPush.sendNotification(endpoint, 120);
+      }
+
+      push.then(function(result) { console.log("Push successful", result)});
+      push.catch(function(err) { console.log("Push failed: ", err) } );
     }
   });
 
@@ -87,7 +87,8 @@ twitterClient.stream('statuses/filter', {track: hashtag},  function(stream){
 
 app.get("/sub", function(req, res){
   console.log(req.query);
-  registrationId = req.query.subId;
+  endpoint = req.query.endpoint;
+  key = req.query.key;
   res.send();
 });
 

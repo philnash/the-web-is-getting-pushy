@@ -29,10 +29,7 @@ $('button').on('click', (event) => {
   serviceWorker.then((registration) => {
     return registration.pushManager.subscribe({userVisibleOnly: true})
   }).then((subscription) => {
-    // Get the GCM id from the endpoint URL
     var endpoint = subscription.endpoint;
-    var endpointParts = endpoint.split('/');
-    var subId = endpointParts[endpointParts.length -1];
-    fetch(`/sub?subId=${subId}`);
+    fetch(`/sub?endpoint=${endpoint}`);
   });
 });
